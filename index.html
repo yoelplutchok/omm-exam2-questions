@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>OMM 1 Exam 2 Practice Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout (CP2 question-page design): masthead with tally + controls, lecture TOC, sticky lecture headers, groups of similar questions */
+:root{
+  --paper:#FBFCFD;--panel:#F2F5F7;--grp:#EEF3F2;--ink:#141A1F;--ink-2:#48555F;--ink-3:#6E7C86;--rule:#DBE2E7;--rule-2:#C3CDD4;
+  --accent:#1B5E5A;--accent-soft:#E4EFEC;--amber:#8A5A00;--amber-soft:#FBF1DC;--red:#9B2C2C;--red-soft:#FBE9E7;
+  --green:#22663A;--green-soft:#E3F2E7;--gold:#B8860B;--shadow:rgba(0,0,0,.18);--veil:rgba(10,14,16,.86);
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;--sans:"Source Sans 3",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#101518;--panel:#182024;--grp:#14211F;--ink:#E8EDEF;--ink-2:#A9B7BE;--ink-3:#7E8F98;--rule:#28343A;--rule-2:#3A4950;
+  --accent:#63C9BC;--accent-soft:#16302E;--amber:#F0C46B;--amber-soft:#2E2412;--red:#F19A93;--red-soft:#341A19;
+  --green:#86D29C;--green-soft:#15291C;--gold:#E8C35A;--shadow:rgba(0,0,0,.5);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#101518;--panel:#182024;--grp:#14211F;--ink:#E8EDEF;--ink-2:#A9B7BE;--ink-3:#7E8F98;--rule:#28343A;--rule-2:#3A4950;
+  --accent:#63C9BC;--accent-soft:#16302E;--amber:#F0C46B;--amber-soft:#2E2412;--red:#F19A93;--red-soft:#341A19;
+  --green:#86D29C;--green-soft:#15291C;--gold:#E8C35A;--shadow:rgba(0,0,0,.5);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.55;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 80px}
+.mast{padding-block:48px 24px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.9rem,5.5vw,2.7rem);line-height:1.15;margin:.35em 0 .4em;text-wrap:balance}
+.lede{font-size:1.04rem;color:var(--ink-2);margin:0 0 20px;max-width:40rem}
+.tally{display:flex;flex-wrap:wrap;gap:4px 22px;font-family:var(--sans);font-size:.82rem;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.tally b{font-weight:700;color:var(--ink);font-size:1rem}
+.score b{color:var(--accent)}
+.controls{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font-family:var(--sans);font-size:.84rem;font-weight:600;background:none;color:var(--ink);border:1px solid var(--rule-2);border-radius:6px;padding:7px 14px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:focus-visible,.opt:focus-visible,.star:focus-visible,.again:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.controls input{font-family:var(--sans);font-size:.88rem;border:1px solid var(--rule-2);background:var(--panel);color:var(--ink);border-radius:6px;padding:7px 10px;flex:1 1 200px;min-width:0}
+.floatreset{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:20;background:var(--paper);box-shadow:0 2px 8px var(--shadow)}
+.toc{padding:22px 0 8px;border-bottom:1px solid var(--rule)}
+.toc h3{font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
+.toc ol{list-style:none;margin:0;padding:0;columns:2 300px;column-gap:28px}
+.toc li{break-inside:avoid;padding:4px 0;display:flex;gap:8px;align-items:baseline;justify-content:space-between;border-bottom:1px dotted var(--rule)}
+.toc a{text-decoration:none;color:var(--ink)}
+.toc a:hover{color:var(--accent)}
+.toc .id,.sechead .id{font-family:var(--sans);font-size:.74rem;font-weight:700;color:var(--accent);margin-right:4px}
+.toc .n{font-family:var(--sans);font-size:.8rem;color:var(--ink-3);font-variant-numeric:tabular-nums}
+section.sec{padding-top:26px}
+.sechead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:6px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);z-index:2}
+.sechead h2{font-family:var(--serif);font-weight:600;font-size:1.32rem;margin:0;text-wrap:balance}
+.sechead .n{font-family:var(--sans);font-size:.8rem;color:var(--ink-3);white-space:nowrap}
+.grp{background:var(--grp);border-radius:8px;padding:2px 14px;margin:12px 0}
+.ghead{font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);padding:10px 0 0}
+.ghead span{text-transform:none;letter-spacing:0;font-weight:600;color:var(--ink-2);font-size:.84rem}
+.grp .q:last-child{border-bottom:0}
+.q{padding:16px 0 14px;border-bottom:1px solid var(--rule)}
+.q header{display:flex;gap:8px;align-items:center;margin-bottom:4px;flex-wrap:wrap}
+.qn{font-family:var(--sans);font-weight:700;font-size:.82rem;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.badge{font-family:var(--sans);font-size:.72rem;color:var(--ink-2);background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:0 8px;white-space:nowrap}
+.star{margin-left:auto;font-family:var(--sans);font-size:1.05rem;line-height:1;background:none;border:1px solid transparent;border-radius:999px;padding:2px 7px;color:var(--ink-3);cursor:pointer}
+.star:hover{border-color:var(--rule-2);color:var(--gold)}
+.star[aria-pressed="true"]{color:var(--gold)}
+.stem{white-space:pre-wrap;overflow-wrap:anywhere}
+.qimg{display:block;max-width:100%;max-height:440px;width:auto;height:auto;margin:10px 0;border:1px solid var(--rule);border-radius:4px}
+.inote{font-family:var(--sans);font-size:.84rem;color:var(--ink-3);font-style:italic;margin-top:6px}
+.opts{display:flex;flex-direction:column;gap:5px;margin:10px 0 0}
+.opt{text-align:left;font-family:var(--serif);font-size:1rem;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer;overflow-wrap:anywhere}
+.opt:hover{border-color:var(--accent)}
+.opt[disabled]{cursor:default}
+.opt.right{background:var(--green-soft);border-color:var(--green)}
+.opt.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.opt .mk{font-family:var(--sans);font-size:.78rem;font-weight:700;margin-left:8px}
+.olist{margin:10px 0 0;padding-left:1.2em}
+.showans{margin-top:10px}
+.verdict{margin-top:10px;font-family:var(--sans);font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:10px}
+.verdict.ok{color:var(--accent)}
+.verdict.no{color:var(--red)}
+.again{font-family:var(--sans);font-size:.76rem;font-weight:600;background:none;border:1px solid var(--rule-2);border-radius:999px;padding:1px 10px;cursor:pointer;color:var(--ink-2)}
+.again:hover{border-color:var(--accent);color:var(--accent)}
+.ans{margin-top:10px;padding:8px 12px;background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;overflow-wrap:anywhere}
+.ans .lab{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:block}
+.fixbox{margin-top:8px;padding:8px 12px;background:var(--amber-soft);border-left:3px solid var(--amber);border-radius:0 4px 4px 0;font-size:.95rem}
+.fixbox .lab{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);display:block}
+.why{margin-top:8px;padding:6px 12px;border-left:3px solid var(--rule-2);font-size:.97rem;overflow-wrap:anywhere}
+.why .lab{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);display:block}
+.why b{font-weight:600;color:var(--accent)}
+.slides,.src{margin-top:10px;font-family:var(--sans)}
+.slides>summary,.src>summary{font-weight:600;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);cursor:pointer;width:max-content}
+.slides>summary:hover,.src>summary:hover{color:var(--accent)}
+.slides figure{margin:8px 0 0}
+.slides img{display:block;width:100%;max-width:760px;height:auto;border:1px solid var(--rule-2);border-radius:4px;background:#fff;cursor:zoom-in}
+.slides figcaption{margin-top:3px;font-size:.8rem;color:var(--ink-2)}
+.slides figcaption small{color:var(--ink-3)}
+.src{font-size:.8rem;color:var(--ink-2)}
+.src ul{margin:4px 0 0;padding-left:16px}
+.src li{overflow-wrap:anywhere}
+.done-hide{display:none!important}
+#lb{position:fixed;inset:0;z-index:50;background:var(--veil);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));cursor:zoom-out}
+#lb img{max-width:100%;max-height:100%;background:#fff;border-radius:4px}
+body.toponly .q:not(.top){display:none}
+body.toponly .grp:not(:has(.q.top)),body.toponly section.sec:not(:has(.q.top)){display:none}
+body.toponly .grp{background:none;padding:0;margin:0}
+body.toponly .ghead{display:none}
+body.toponly .grp .q:last-child{border-bottom:1px solid var(--rule)}
+.ntop{display:none}
+body.toponly .ntop{display:inline}
+body.toponly .nall{display:none}
+.btn .cnt{font-weight:400;opacity:.8}
+body.staronly .q:not(.starred){display:none}
+body.newonly section.sec.old,body.newonly .toc li.old,body.newonly .toc h3.old{display:none}
+.toc h3.old{margin-top:14px}
+body.staronly .grp:not(:has(.q.starred)),body.staronly section.sec:not(:has(.q.starred)){display:none}
+/* Lecture summary: a reading panel at the top of each lecture, before its questions */
+.sum{margin:14px 0 22px;border:1px solid var(--rule);border-top:3px solid var(--accent);border-radius:0 0 8px 8px;background:var(--panel)}
+.sum>summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-family:var(--sans)}
+.sum>summary::-webkit-details-marker{display:none}
+.sum>summary .t{font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.sum>summary .m{font-size:.8rem;color:var(--ink-3)}
+.sum>summary .tg{margin-left:auto;font-size:.78rem;font-weight:600;color:var(--ink-2)}
+.sum[open]>summary .tg::after{content:"Collapse ▴"}
+.sum:not([open])>summary .tg::after{content:"Read the summary ▾"}
+.sumbody{padding:0 16px 16px}
+.sumbody>p,.sumbody>ul,.sumbody>ol,.sumbody>h3{max-width:74ch}
+.sumbody .bp{font-size:1.06rem;line-height:1.6;color:var(--ink);margin:0 0 6px;padding:10px 14px;background:var(--paper);border-left:3px solid var(--accent);border-radius:0 4px 4px 0}
+.sumbody h3{font-family:var(--serif);font-weight:600;font-size:1.12rem;margin:22px 0 4px;text-wrap:balance;color:var(--ink)}
+.sumbody p{margin:.45em 0;line-height:1.62}
+.sumbody ul,.sumbody ol{margin:.4em 0;padding-left:1.25em}
+.sumbody li{margin:.18em 0;line-height:1.55}
+.sumbody b{font-weight:600;color:var(--accent)}
+.sumbody .tw{overflow-x:auto;margin:.6em 0;max-width:100%}
+.sumbody table{border-collapse:collapse;font-family:var(--sans);font-size:.88rem;line-height:1.4;min-width:100%}
+.sumbody th,.sumbody td{border:1px solid var(--rule-2);padding:5px 8px;text-align:left;vertical-align:top}
+.sumbody th{background:var(--accent-soft);font-weight:700;color:var(--ink)}
+.sumbody td{background:var(--paper)}
+.sumbody figure{margin:10px 0 4px}
+.sumbody figure img{display:block;width:100%;max-width:640px;height:auto;border:1px solid var(--rule-2);border-radius:4px;background:#fff;cursor:zoom-in}
+.sumbody figcaption{font-family:var(--sans);font-size:.8rem;color:var(--ink-2);margin-top:3px}
+.sumbody figcaption small{color:var(--ink-3)}
+.sumbox{margin-top:20px;padding:10px 14px;border-radius:6px;border:1px solid var(--rule-2);background:var(--paper)}
+.sumbox .lab{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:2px}
+.sumbox.mk{border-left:4px solid var(--accent)}
+.sumbox.mk .lab{color:var(--accent)}
+.sumbox.tr{border-left:4px solid var(--amber);background:var(--amber-soft)}
+.sumbox.tr .lab{color:var(--amber)}
+.sumbox ul{margin:4px 0 0}
+.sumend{font-family:var(--sans);font-size:.8rem;color:var(--ink-3);margin-top:14px}
+.sumend a{color:var(--accent)}
+body.nosum .sum,body.staronly .sum,body.searching .sum{display:none}
+.partdiv{margin:44px 0 0;padding:14px 0 0;border-top:3px double var(--rule-2);font-family:var(--sans);font-size:.86rem;color:var(--ink-2)}
+.partdiv span{display:block;font-size:.76rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:2px}
+body.newonly .partdiv{display:none}
+.empty{font-family:var(--sans);color:var(--ink-3);padding:24px 0}
+.foot{margin-top:40px;font-family:var(--sans);font-size:.78rem;color:var(--ink-3)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.floatreset,.controls,.toc{display:none!important}}
+</style>
+
+</head>
+<body>
+<main class="wrap">
+<header class="mast">
+  <div class="eyebrow">OMM 1 Written Exam 2 · Fri Nov 20 2026 · Weeks 11–14</div>
+  <h1>OMM 1 Exam 2 Practice Questions</h1>
+  <p class="lede" id="lede">The material taught since Written Exam 1: lymphatics and the three lumbar-spine weeks. Every practice question the 2026 OMM 1 Canvas course posted for these weeks: interactive-session polls and case slides, faculty practice-question handouts, pre-lab quizzes and the lumbar review package. Each lecture opens with a summary. Similar questions sit together in a shaded box. Tap an answer to see why it is right, why the others are wrong, and the slides that teach it.</p>
+  <div class="tally" id="tally"></div>
+  <div class="controls">
+    <button class="btn" id="toponly" type="button" aria-pressed="false" title="One question from each group of similar questions (the clearest version), at most 40 per lecture">Top questions only <span class="cnt" id="topcnt"></span></button>
+    <button class="btn" id="staronly" type="button" aria-pressed="false">★ Starred only</button>
+    <button class="btn" id="nosum" type="button" aria-pressed="false" hidden>Hide summaries</button>
+    <button class="btn" id="reset" type="button">Clear my answers</button>
+    <input id="q" type="search" placeholder="Search questions (e.g. Chapman, psoas, Fryette)" aria-label="Search questions">
+  </div>
+</header>
+<nav class="toc" id="toc" aria-label="Lectures"></nav>
+<div id="body"></div>
+<p class="foot">Sources: the 2026 OMM 1 Canvas course only (Weeks 11–14) — interactive-session decks (Poll Everywhere and case slides), faculty practice-question and review handouts, Canvas quizzes and the lumbar review package. Answers are the sources&#x27; keys, checked against this year&#x27;s lectures. Where a key was wrong, the correct answer is given and a &quot;Correction&quot; box says what changed. Stars and answers are saved in this browser only.</p>
+</main>
+<button class="btn floatreset" id="reset2" type="button" hidden>Clear my answers</button>
+
+<script src="data.js" charset="utf-8"></script>
+<script>
+(function(){
+const D=window.OMMQ, KEY="omm1";
+const store={get(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const done=store.get(KEY+"-done")||{}, stars=store.get(KEY+"-stars")||{};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const lt=o=>String(o).trim().replace(/^\(/,"").charAt(0).toUpperCase();
+const byId={}; D.groups.forEach(g=>g.q.forEach(q=>{byId[q.id]=q;q._g=g}));
+const nq=D.groups.reduce((a,g)=>a+g.q.length,0), ng=D.groups.filter(g=>g.q.length>1).length;
+const nsrc=new Set(D.groups.flatMap(g=>g.q.flatMap(q=>q.src.map(s=>s.f||s.t+"|"+s.n)))).size;
+$("#tally").innerHTML=`<span><b>${nq}</b> questions</span><span><b>${ng}</b> groups of similar questions</span><span><b>${nsrc}</b> source files</span><span class="score" id="score"></span>`;
+$("#lede").textContent=D.meta.lede;
+
+function card(q,n){
+  const badges=q.src.slice(0,3).map(s=>`<span class="badge" title="${esc(s.n)}${s.sl?" · slide "+s.sl:""}">${esc(s.t)}</span>`).join("")+(q.src.length>3?`<span class="badge">+${q.src.length-3}</span>`:"");
+  const opts=!q.rv?`<div class="opts">${q.o.map(o=>`<button class="opt" type="button" data-l="${esc(lt(o))}">${esc(o)}</button>`).join("")}</div>`
+    :(q.o.length?`<ol class="olist" type="A">${q.o.map(o=>`<li>${esc(o)}</li>`).join("")}</ol>`:"")+`<button class="btn showans" type="button">Show answer</button>`;
+  return `<article class="q${stars[q.id]?" starred":""}${q.t?" top":""}" data-id="${esc(q.id)}"><header><span class="qn">${n}</span>${badges}<button class="star" type="button" aria-pressed="${!!stars[q.id]}" aria-label="Star this question" title="Star">${stars[q.id]?"★":"☆"}</button></header>
+    <div class="stem">${esc(q.s)}</div>${q.img?`<img class="qimg" loading="lazy" src="${q.img}" alt="${esc(q.in||"Question picture")}">`:(q.in?`<div class="inote">Picture in the source: ${esc(q.in)}</div>`:"")}
+    ${opts}<div class="verdict" hidden></div><div class="reveal" hidden></div></article>`; }
+
+function answer(el,q,picked){
+  const G=q.g||[], g=q._g, opts=q.o.filter(o=>G.includes(lt(o)));
+  const label=q.rv?(q.at||q.a||"—"):(G.length?opts.join("  /  "):"No option is correct as written");
+  const v=el.querySelector(".verdict");
+  if(!q.rv){ const ok=picked?G.includes(picked):true; v.className="verdict "+(ok?"ok":"no"); v.innerHTML=(ok?"Correct":"Not quite")+`<button class="again" type="button">Try again</button>`; }
+  else { v.className="verdict"; v.innerHTML=`<button class="again" type="button">Hide answer</button>`; const b=el.querySelector(".showans"); if(b) b.hidden=true; }
+  v.hidden=false;
+  let h=`<div class="ans"><span class="lab">${G.length>1&&!q.rv?"Accepted answers":"Answer"}</span>${esc(label)}</div>`;
+  if(q.fl.length) h+=q.fl.map(f=>`<div class="fixbox"><span class="lab">${q.ch?"Correction"+(q.k&&q.k.length?" · the source keyed "+esc(q.k.join(", ")):""):"Note on the source"}</span>${esc(f)}</div>`).join("");
+  if(q.why) h+=`<div class="why"><span class="lab">Why</span>${q.why}</div>`; else if(q.ex) h+=`<div class="why"><span class="lab">From the source</span>${esc(q.ex)}</div>`;
+  if(g.slides.length) h+=`<details class="slides"><summary>Slides (${g.slides.length})</summary>${g.slides.map(s=>`<figure><img loading="lazy" src="${s.src}" alt="${esc(s.cap)}"><figcaption>${esc(s.cap)} <small>· ${esc(s.where)}</small></figcaption></figure>`).join("")}</details>`;
+  h+=`<details class="src"><summary>Sources (${q.src.length})</summary><ul>${q.src.map(s=>`<li>${esc(s.t)} — ${esc(s.n)}${s.sl?" (slide "+s.sl+")":""}</li>`).join("")}</ul>${q.tg.length?`<div>Taught: ${esc(q.tg.join("; "))}</div>`:""}</details>`;
+  const r=el.querySelector(".reveal"); r.innerHTML=h; r.hidden=false;
+  el.querySelectorAll(".opt").forEach(b=>{ b.disabled=true; b.querySelectorAll(".mk").forEach(m=>m.remove());
+    if(G.includes(b.dataset.l)){ b.classList.add("right"); b.insertAdjacentHTML("beforeend",'<span class="mk">✓</span>'); }
+    if(picked&&b.dataset.l===picked&&!G.includes(picked)){ b.classList.add("wrong"); b.insertAdjacentHTML("beforeend",'<span class="mk">✗ your choice</span>'); } });
+}
+function resetCard(el){
+  const v=el.querySelector(".verdict"), r=el.querySelector(".reveal");
+  v.hidden=true; v.innerHTML=""; r.hidden=true; r.innerHTML="";
+  el.querySelectorAll(".opt").forEach(b=>{ b.disabled=false; b.classList.remove("right","wrong"); b.querySelectorAll(".mk").forEach(m=>m.remove()); });
+  const b=el.querySelector(".showans"); if(b) b.hidden=false;
+}
+function score(){ const v=Object.entries(done).filter(([k,x])=>byId[k]&&x!=="seen"); const ok=v.filter(([k,x])=>x==="ok").length;
+  $("#score").innerHTML=v.length?`Score <b>${ok}</b> / ${v.length} (${Math.round(100*ok/v.length)}%)`:""; }
+
+// ---- lecture summary panel (read first, then the questions)
+const SUM=D.sum||{};
+function sumPanel(l){
+  const S=SUM[l.id]; if(!S) return "";
+  const tw=h=>h.replace(/<table>/g,'<div class="tw"><table>').replace(/<\/table>/g,"</table></div>");
+  const words=(S.bp+" "+S.sec.map(s=>s.html).join(" ")).replace(/<[^>]+>/g," ").split(/\s+/).filter(Boolean).length;
+  let h=`<details class="sum" open><summary><span class="t">Lecture summary</span><span class="m">${S.sec.length} parts · about ${Math.max(1,Math.round(words/200))} min read · then the questions</span><span class="tg"></span></summary><div class="sumbody">`;
+  if(S.bp) h+=`<p class="bp">${S.bp}</p>`;
+  for(const s of S.sec){
+    h+=`<h3>${s.h}</h3>${tw(s.html)}`;
+    h+=s.figs.map(f=>`<figure><img loading="lazy" src="${f.src}" alt="${esc(f.cap)}"><figcaption>${esc(f.cap)} <small>· ${esc(f.where)}</small></figcaption></figure>`).join("");
+  }
+  if(S.mk.length) h+=`<div class="sumbox mk"><span class="lab">Key facts to remember</span><ul>${S.mk.map(x=>`<li>${x}</li>`).join("")}</ul></div>`;
+  if(S.tr.length) h+=`<div class="sumbox tr"><span class="lab">Easy to mix up</span><ul>${S.tr.map(x=>`<li>${x}</li>`).join("")}</ul></div>`;
+  h+=`<p class="sumend">End of summary. The ${esc(l.id.split("-")[1])} questions start below.</p></div></details>`;
+  return h;
+}
+
+// ---- build the page (Weeks 11–14 first: taught since Written Exam 1; then the Exam 1 weeks)
+const NEW=new Set(D.newLectures||[]);
+let tocNew=`<h3>Lectures since Written Exam 1 (Weeks 11–14)</h3><ol>`, tocOld=`<h3 class="old">Exam 1 material (Weeks 1–8) — still fair game</h3><ol>`, body="";
+const ordered=[...D.lectures.filter(l=>NEW.has(l.id)),...D.lectures.filter(l=>!NEW.has(l.id))];
+let firstOld=true;
+for(const l of ordered){
+  const gs=D.groups.filter(g=>g.l===l.id); let k=0, inner=""; const nt=gs.reduce((a,g)=>a+g.q.filter(q=>q.t).length,0);
+  const tag=l.id.split("-")[1], isOld=!NEW.has(l.id);
+  for(const g of gs){ const cards=g.q.map(q=>card(q,tag+"·"+(++k))).join("");
+    inner+=g.q.length>1?`<div class="grp"><div class="ghead">${g.q.length} similar questions · <span>${esc(g.label)}</span></div>${cards}</div>`:cards; }
+  const li=`<li${isOld?' class="old"':''}><a href="#${l.id}"><span class="id">${tag}</span>${esc(l.t)}</a><span class="n"><span class="nall">${k}</span><span class="ntop">${nt}</span></span></li>`;
+  if(isOld) tocOld+=li; else tocNew+=li;
+  const divider=isOld&&firstOld?`<div class="partdiv old"><span>Exam 1 material · Weeks 1–8</span>The syllabus says all OMM material is cumulative and may be revisited on each exam.</div>`:"";
+  if(isOld) firstOld=false;
+  body+=`${divider}<section class="sec${isOld?" old":""}" id="${l.id}"><div class="sechead"><h2><span class="id">${esc(tag)}</span> ${esc(l.t)}</h2><span class="n"><span class="nall">${k} questions</span><span class="ntop">top ${nt} of ${k}</span></span></div>${sumPanel(l)}${inner}</section>`;
+}
+const toc=tocNew+(D.lectures.some(l=>!NEW.has(l.id))?`</ol>`+tocOld:"");
+$("#toc").innerHTML=toc+`</ol>`; $("#body").innerHTML=body;
+document.querySelectorAll("article.q").forEach(el=>{ const d=done[el.dataset.id]; if(d) answer(el,byId[el.dataset.id],(d==="ok"||d==="seen")?null:d); });
+score();
+
+// ---- clicks
+document.addEventListener("click",e=>{
+  const t=e.target, el=t.closest&&t.closest("article.q");
+  if(t.closest(".opt")&&el&&!t.closest(".opt").disabled){ const q=byId[el.dataset.id], p=t.closest(".opt").dataset.l; done[q.id]=(q.g||[]).includes(p)?"ok":p; store.set(KEY+"-done",done); answer(el,q,p); score(); return; }
+  if(t.classList.contains("showans")&&el){ const q=byId[el.dataset.id]; done[q.id]="seen"; store.set(KEY+"-done",done); answer(el,q,null); return; }
+  if(t.classList.contains("again")&&el){ delete done[el.dataset.id]; store.set(KEY+"-done",done); resetCard(el); score(); return; }
+  if(t.classList.contains("star")&&el){ const id=el.dataset.id; if(stars[id]) delete stars[id]; else stars[id]=1; store.set(KEY+"-stars",stars);
+    t.setAttribute("aria-pressed",!!stars[id]); t.textContent=stars[id]?"★":"☆"; el.classList.toggle("starred",!!stars[id]); return; }
+  if(t.tagName==="IMG"&&(t.closest(".slides")||t.closest(".sumbody"))){ const lb=document.createElement("div"); lb.id="lb"; lb.innerHTML=`<img src="${t.getAttribute("src")}" alt="">`; lb.onclick=()=>lb.remove(); document.body.appendChild(lb); }
+});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ const lb=document.getElementById("lb"); if(lb) lb.remove(); } });
+$("#topcnt").textContent="("+D.groups.reduce((a,g)=>a+g.q.filter(q=>q.t).length,0)+")";
+$("#toponly").onclick=function(){ const on=this.getAttribute("aria-pressed")!=="true"; this.setAttribute("aria-pressed",on); document.body.classList.toggle("toponly",on); try{localStorage.setItem(KEY+"-top",on?"1":"0")}catch(e){} };
+try{ if(/[?&]top\b/.test(location.search)||localStorage.getItem(KEY+"-top")==="1") $("#toponly").click(); }catch(e){ if(/[?&]top\b/.test(location.search)) $("#toponly").click(); }
+if(Object.keys(SUM).length){ const b=$("#nosum"); b.hidden=false;
+  b.onclick=function(){ const on=this.getAttribute("aria-pressed")!=="true"; this.setAttribute("aria-pressed",on); this.textContent=on?"Show summaries":"Hide summaries"; document.body.classList.toggle("nosum",on); try{localStorage.setItem(KEY+"-nosum",on?"1":"0")}catch(e){} };
+  try{ if(localStorage.getItem(KEY+"-nosum")==="1") b.click(); }catch(e){} }
+if($("#newonly")) $("#newonly").onclick=function(){ const on=this.getAttribute("aria-pressed")!=="true"; this.setAttribute("aria-pressed",on); document.body.classList.toggle("newonly",on); try{localStorage.setItem(KEY+"-new",on?"1":"0")}catch(e){} };
+$("#staronly").onclick=function(){ const on=this.getAttribute("aria-pressed")!=="true"; this.setAttribute("aria-pressed",on); document.body.classList.toggle("staronly",on); window.scrollTo(0,0); };
+$("#reset").onclick=$("#reset2").onclick=()=>{ for(const k of Object.keys(done)) delete done[k]; store.set(KEY+"-done",done); document.querySelectorAll("article.q").forEach(resetCard); score(); };
+new IntersectionObserver(([en])=>{ $("#reset2").hidden=en.isIntersecting; }).observe(document.querySelector(".controls"));
+// ---- search
+$("#q").oninput=()=>{ const s=$("#q").value.trim().toLowerCase(); document.body.classList.toggle("searching",!!s);
+  document.querySelectorAll("article.q").forEach(el=>{ const q=byId[el.dataset.id]; el.classList.toggle("done-hide",!!s&&!(q.s+" "+q.o.join(" ")+" "+q.at+" "+q._g.label).toLowerCase().includes(s)); });
+  document.querySelectorAll(".grp").forEach(g=>g.classList.toggle("done-hide",!g.querySelector("article.q:not(.done-hide)")));
+  document.querySelectorAll("section.sec").forEach(sc=>sc.classList.toggle("done-hide",!sc.querySelector("article.q:not(.done-hide)"))); };
+})();
+</script>
+
+</body>
+</html>
