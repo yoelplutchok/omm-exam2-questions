@@ -192,6 +192,12 @@ details.primer.fold>summary:focus-visible{outline:2px solid var(--accent);outlin
 .primer th,.primer td{border:1px solid var(--rule-2);padding:5px 8px;text-align:left;vertical-align:top}
 .primer th{background:var(--accent-soft);font-weight:700;color:var(--ink)}
 .primer td{background:var(--paper)}
+.primer.notes p{margin:.6em 0 0}
+/* Nov 9: closing short-form summary of each notes part */
+.primer .psum{margin:18px 0 4px;padding:10px 16px 9px;border:1px solid var(--rule-2);border-left:4px solid var(--accent);border-radius:6px;background:var(--accent-soft)}
+.primer .psum h4{margin:0 0 4px;color:var(--accent)}
+.primer .psum ul{margin:.2em 0 0;max-width:none}
+.primer .psum li{margin:.14em 0;line-height:1.45}
 .primer figure{margin:12px 0 6px}
 .primer figure img{display:block;width:100%;max-width:560px;height:auto;border:1px solid var(--rule-2);border-radius:4px;background:#fff;cursor:zoom-in}
 .primer figcaption{font-family:var(--sans);font-size:.78rem;color:var(--ink-2);margin-top:3px;max-width:560px}
@@ -278,9 +284,9 @@ span.hlu{text-decoration:underline;text-decoration-color:var(--red);text-decorat
 <body>
 <main class="wrap">
 <header class="mast">
-  <div class="eyebrow">OMM 1 Written Exam 2 · Fri Nov 20 2026 · Weeks 11–14</div>
+  <div class="eyebrow">OMM 1 Written Exam 2 · Mon Nov 16 2026 · Weeks 11–14</div>
   <h1>OMM 1 Exam 2 Practice Questions</h1>
-  <p class="lede" id="lede">The material taught since Written Exam 1: lymphatics and the three lumbar-spine weeks. Each lecture is taught as organized notes, split into numbered sections and parts, and every part is followed by its practice questions. The questions are every one the 2026 OMM 1 Canvas course posted for these weeks (interactive polls and cases, faculty practice questions, pre-lab quizzes, the lumbar review package) plus past-year TA reviews and practice questions from the SGA drive. Similar questions sit together in a shaded box. Tap an answer to see why it is right, why the others are wrong, and the slides and TA-review pictures that teach it.</p>
+  <p class="lede" id="lede">The material taught since Written Exam 1: lymphatics and the three lumbar-spine weeks. Each lecture is split into numbered sections and parts. Every part starts with notes that explain the material in plain sentences and end with a short summary, and then come that part&#x27;s practice questions. The questions are every one the 2026 OMM 1 Canvas course posted for these weeks (interactive polls and cases, pre-lab and lecture quizzes, faculty practice questions, the lumbar review package) plus past-year TA reviews and practice questions from the SGA drive. Similar questions sit together in a shaded box. Tap an answer to see why it is right, why the others are wrong, and the slides and TA-review pictures that teach it.</p>
   <div class="tally" id="tally"></div>
   <div class="controls">
     <button class="btn" id="toponly" type="button" aria-pressed="false" title="One question from each group of similar questions (the clearest, newest version), at most 50 per lecture; groups asked most often across years come first">Top questions only <span class="cnt" id="topcnt"></span></button>
@@ -295,7 +301,7 @@ span.hlu{text-decoration:underline;text-decoration-color:var(--red);text-decorat
 <nav class="toc" id="toc" aria-label="Lectures"></nav>
 <div id="body"></div>
 <div id="hltools" hidden role="toolbar" aria-label="Highlight the selected text"><button type="button" class="sw y" data-a="y" title="Highlight yellow (H)" aria-label="Highlight yellow"></button><button type="button" class="sw g" data-a="g" title="Highlight green" aria-label="Highlight green"></button><button type="button" class="sw p" data-a="p" title="Highlight pink" aria-label="Highlight pink"></button><button type="button" class="u" data-a="u" title="Underline (U)">U</button><button type="button" data-a="x" title="Erase highlights and underlines in the selection (E)">Erase</button></div>
-<p class="foot">Sources: the 2026 OMM 1 Canvas course (Weeks 11–14: interactive-session decks, faculty practice-question and review handouts, pre-lab quizzes, the lumbar review package) and, from the SGA drive, the 2016–2025 Exam 2 TA reviews, the 2026 Harlem TA reviews, Capobianco practice questions and a 2021 lumbar review. Answers are checked against this year&#x27;s lectures; where a key was wrong, the correct answer is given and a &quot;Correction&quot; box says what changed. Stars, answers and highlights are saved in this browser only.</p>
+<p class="foot">Sources: the 2026 OMM 1 Canvas course (Weeks 11–14: lectures incl. the Clinical Lumbar Spine lecture, interactive-session decks incl. the final IA 12-13-14 deck, faculty practice-question and review handouts, pre-lab and lecture quizzes, the lumbar review package), a classmate&#x27;s compilation of the 2026 quizzes and class polls, and, from the SGA drive, the 2016–2025 Exam 2 TA reviews, the 2026 Harlem TA reviews, Capobianco practice questions and a 2021 lumbar review. Answers are checked against this year&#x27;s lectures; where a key was wrong, the correct answer is given and a &quot;Correction&quot; box says what changed. Stars, answers and highlights are saved in this browser only.</p>
 </main>
 <button class="btn floatreset" id="reset2" type="button" hidden>Clear my answers</button>
 
