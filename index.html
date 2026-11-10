@@ -337,7 +337,7 @@ function answer(el,q,picked){
   else { v.className="verdict"; v.innerHTML=`<button class="again" type="button">Hide answer</button>`; const b=el.querySelector(".showans"); if(b) b.hidden=true; }
   v.hidden=false;
   let h=`<div class="ans" data-hk="a:${esc(q.id)}"><span class="lab">${G.length>1&&!q.rv?"Accepted answers":"Answer"}</span>${esc(label)}</div>`;
-  if(q.fl.length) h+=q.fl.map((f,i)=>`<div class="fixbox" data-hk="f:${esc(q.id)}:${i}"><span class="lab">${q.ch?"Correction"+(q.k&&q.k.length?" · the source keyed "+esc(q.k.join(", ")):""):"Note on the source"}</span>${esc(f)}</div>`).join("");
+  if(q.fl.length) h+=q.fl.map((f,i)=>`<div class="fixbox" data-hk="f:${esc(q.id)}:${i}"><span class="lab">Correction</span>${esc(f)}</div>`).join("");
   if(q.why) h+=`<div class="why" data-hk="w:${esc(q.id)}"><span class="lab">Why</span>${q.why}</div>`; else if(q.ex) h+=`<div class="why" data-hk="w:${esc(q.id)}"><span class="lab">From the source</span>${esc(q.ex)}</div>`;
   if(g.slides.length&&FEAT){ const nt=g.slides.filter(s=>s.tb).length, ns=g.slides.length-nt;
     h+=`<details class="slides"><summary>${ns?"Slides":""}${ns&&nt?" &amp; ":""}${nt?esc(D.meta.tbl||"Textbook"):""} <span class="sct">(${[ns?ns+" slide"+(ns>1?"s":""):"",nt?nt+" "+(D.meta.tbn||"textbook picture")+(nt>1?"s":""):""].filter(Boolean).join(", ")})</span></summary>${g.slides.map(figHTML).join("")}</details>`; }
