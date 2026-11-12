@@ -321,24 +321,53 @@ const nsrc=new Set(D.groups.flatMap(g=>g.q.flatMap(q=>q.src.map(s=>s.f||s.t+"|"+
 $("#tally").innerHTML=`<span><b>${nq}</b> questions</span><span><b>${ng}</b> groups of similar questions</span><span><b>${nsrc}</b> source files</span><span class="score" id="score"></span>`;
 $("#lede").textContent=D.meta.lede;
 
+// ---- Nov 11 (his ask: "whenever you click clear my answers it also shuffles the order of the answers … every possible
+// order … the right answer shouldn't be connected to a specific letter"). Each option keeps its ORIGINAL letter as its
+// identity (data-l, the key q.g, saved answers); only the letter shown changes. ORD[id] = original letters in display
+// order, kept until the next clear. Letters the text uses as references are tokens ⟦X⟧ (optletters.py) and are re-lettered;
+// q.pn = options that never move ("All/None of the above", "B and E are correct"); q.wl = lead letters of each why line.
+const ORD=store.get(KEY+"-ord")||{};
+const TK=/⟦([A-H])⟧/g, TRUN=/⟦[A-H]⟧(?:(?:\s*,\s*(?:(?:and|or)\s+)?|\s+(?:and|or)\s+)⟦[A-H]⟧)+/g;
+const obody=o=>String(o).replace(/^\s*\(?[A-Za-z][.)]\s*/,"");
+const canShuf=q=>!q.rv&&q.o.length>1;
+function rint(n){ const c=window.crypto||window.msCrypto;  // unbiased whole number 0 … n-1
+  if(c&&c.getRandomValues){ const a=new Uint32Array(1), lim=Math.floor(4294967296/n)*n; do c.getRandomValues(a); while(a[0]>=lim); return a[0]%n; }
+  return Math.floor(Math.random()*n); }
+function order(q){ const base=q.o.map(lt), s=ORD[q.id]; if(!canShuf(q)||typeof s!=="string"||s.length!==base.length) return base;
+  const a=s.split(""); if(a.slice().sort().join("")!==base.slice().sort().join("")) return base;
+  if((q.pn||[]).some(p=>a[base.indexOf(p)]!==p)) return base; return a; }
+function shuffled(q){ const base=q.o.map(lt), pin=new Set(q.pn||[]), free=base.filter(x=>!pin.has(x));
+  for(let i=free.length-1;i>0;i--){ const j=rint(i+1), t=free[i]; free[i]=free[j]; free[j]=t; }  // Fisher–Yates: every order equally likely
+  let k=0; return base.map(x=>pin.has(x)?x:free[k++]); }
+function dmap(q){ const m={}; order(q).forEach((L,i)=>m[L]=String.fromCharCode(65+i)); return m; }
+function RL(s,m){ return String(s).replace(TRUN,run=>{ const L=[...run.matchAll(TK)].map(x=>m[x[1]]||x[1]).sort(), sp=run.split(/⟦[A-H]⟧/).slice(1,-1);
+    return L.map((x,i)=>x+(i<sp.length?sp[i]:"")).join(""); }).replace(TK,(_,x)=>m[x]||x); }
+function optOf(q,L){ return q.o.find(o=>lt(o)===L); }
+function optButtons(q){ const m=dmap(q); return order(q).map((L,i)=>`<button class="opt" type="button" data-l="${esc(L)}">${String.fromCharCode(65+i)}. ${RL(esc(obody(optOf(q,L))),m)}</button>`).join(""); }
+function whyHTML(q,m){ const segs=q.why.split("<br>");
+  if(q.wl&&q.wl.length===segs.length){ const pos={}; order(q).forEach((L,i)=>pos[L]=i); const bl=[];
+    segs.forEach((s,i)=>{ if(i>0&&q.wl[i]) bl.push({k:Math.min(...q.wl[i].split("").map(L=>pos[L]??99)),i,s:[s]}); else if(bl.length) bl[bl.length-1].s.push(s); else bl.push({k:-1,i,s:[s]}); });
+    return RL([bl[0],...bl.slice(1).sort((a,b)=>a.k-b.k||a.i-b.i)].flatMap(b=>b.s).join("<br>"),m); }
+  return RL(q.why,m); }
+
 function card(q,n){
   const badges=q.src.slice(0,3).map(s=>`<span class="badge" title="${esc(s.n)}${s.sl?" · slide "+s.sl:""}">${esc(s.t)}</span>`).join("")+(q.src.length>3?`<span class="badge">+${q.src.length-3}</span>`:"");
-  const opts=!q.rv?`<div class="opts">${q.o.map(o=>`<button class="opt" type="button" data-l="${esc(lt(o))}">${esc(o)}</button>`).join("")}</div>`
+  const opts=!q.rv?`<div class="opts">${optButtons(q)}</div>`
     :(q.o.length?`<ol class="olist" type="A">${q.o.map(o=>`<li>${esc(o)}</li>`).join("")}</ol>`:"")+`<button class="btn showans" type="button">Show answer</button>`;
   return `<article class="q${stars[q.id]?" starred":""}${q.t?" top":""}" data-id="${esc(q.id)}"><header><span class="qn">${n}</span>${badges}<button class="star" type="button" aria-pressed="${!!stars[q.id]}" aria-label="Star this question" title="Star">${stars[q.id]?"★":"☆"}</button></header>
     <div class="stem" data-hk="s:${esc(q.id)}">${esc(q.s)}</div>${q.img?(FEAT?`<div class="pimg qpimg" data-cap="${esc("Question picture · "+String(q.s).slice(0,90))}" data-where="${esc(q.src[0]?q.src[0].t:"")}"><img class="qimg" loading="lazy" src="${q.img}" alt="${esc(q.in||"Question picture")}"></div>`:`<img class="qimg" loading="lazy" src="${q.img}" alt="${esc(q.in||"Question picture")}">`):(q.in?`<div class="inote">Picture in the source: ${esc(q.in)}</div>`:"")}
     ${opts}<div class="verdict" hidden></div><div class="reveal" hidden></div></article>`; }
 
 function answer(el,q,picked){
-  const G=q.g||[], g=q._g, opts=q.o.filter(o=>G.includes(lt(o)));
-  const label=q.rv?(q.at||q.a||"—"):(G.length?opts.join("  /  "):"No option is correct as written");
+  const G=q.g||[], g=q._g, m=dmap(q);
+  const label=q.rv?esc(q.at||q.a||"—"):(G.length?order(q).filter(L=>G.includes(L)).map(L=>`${m[L]}. ${RL(esc(obody(optOf(q,L))),m)}`).join("  /  "):"No option is correct as written");
   const v=el.querySelector(".verdict");
   if(!q.rv){ const ok=picked?G.includes(picked):true; v.className="verdict "+(ok?"ok":"no"); v.innerHTML=(ok?"Correct":"Not quite")+`<button class="again" type="button">Try again</button>`; }
   else { v.className="verdict"; v.innerHTML=`<button class="again" type="button">Hide answer</button>`; const b=el.querySelector(".showans"); if(b) b.hidden=true; }
   v.hidden=false;
-  let h=`<div class="ans" data-hk="a:${esc(q.id)}"><span class="lab">${G.length>1&&!q.rv?"Accepted answers":"Answer"}</span>${esc(label)}</div>`;
-  if(q.fl.length) h+=q.fl.map((f,i)=>`<div class="fixbox" data-hk="f:${esc(q.id)}:${i}"><span class="lab">Correction</span>${esc(f)}</div>`).join("");
-  if(q.why) h+=`<div class="why" data-hk="w:${esc(q.id)}"><span class="lab">Why</span>${q.why}</div>`; else if(q.ex) h+=`<div class="why" data-hk="w:${esc(q.id)}"><span class="lab">From the source</span>${esc(q.ex)}</div>`;
+  let h=`<div class="ans" data-hk="a:${esc(q.id)}"><span class="lab">${G.length>1&&!q.rv?"Accepted answers":"Answer"}</span>${label}</div>`;
+  if(q.fl.length) h+=q.fl.map((f,i)=>`<div class="fixbox" data-hk="f:${esc(q.id)}:${i}"><span class="lab">Correction</span>${RL(esc(f),m)}</div>`).join("");
+  if(q.why) h+=`<div class="why" data-hk="w:${esc(q.id)}"><span class="lab">Why</span>${whyHTML(q,m)}</div>`; else if(q.ex) h+=`<div class="why" data-hk="w:${esc(q.id)}"><span class="lab">From the source</span>${esc(q.ex)}</div>`;
   if(g.slides.length&&FEAT){ const nt=g.slides.filter(s=>s.tb).length, ns=g.slides.length-nt;
     h+=`<details class="slides"><summary>${ns?"Slides":""}${ns&&nt?" &amp; ":""}${nt?esc(D.meta.tbl||"Textbook"):""} <span class="sct">(${[ns?ns+" slide"+(ns>1?"s":""):"",nt?nt+" "+(D.meta.tbn||"textbook picture")+(nt>1?"s":""):""].filter(Boolean).join(", ")})</span></summary>${g.slides.map(figHTML).join("")}</details>`; }
   else if(g.slides.length) h+=`<details class="slides"><summary>Slides (${g.slides.length})</summary>${g.slides.map(s=>`<figure><img loading="lazy" src="${s.src}" alt="${esc(s.cap)}"><figcaption>${esc(s.cap)} <small>· ${esc(s.where)}</small></figcaption></figure>`).join("")}</details>`;
@@ -548,11 +577,15 @@ else if(Object.keys(SUM).length){ const b=$("#nosum"); b.hidden=false;
   b.onclick=function(){ const on=this.getAttribute("aria-pressed")!=="true"; this.setAttribute("aria-pressed",on); this.textContent=on?"Show summaries":"Hide summaries"; document.body.classList.toggle("nosum",on); try{localStorage.setItem(KEY+"-nosum",on?"1":"0")}catch(e){} };
   try{ if(localStorage.getItem(KEY+"-nosum")==="1") b.click(); }catch(e){} }
 $("#staronly").onclick=function(){ const on=this.getAttribute("aria-pressed")!=="true"; this.setAttribute("aria-pressed",on); document.body.classList.toggle("staronly",on); window.scrollTo(0,0); };
-$("#reset").onclick=$("#reset2").onclick=()=>{ for(const k of Object.keys(done)) delete done[k]; store.set(KEY+"-done",done); document.querySelectorAll("article.q").forEach(resetCard); score(); };
+$("#reset").onclick=$("#reset2").onclick=function(){ for(const k of Object.keys(done)) delete done[k]; store.set(KEY+"-done",done);
+  for(const q of Object.values(byId)) if(canShuf(q)) ORD[q.id]=shuffled(q).join(""); store.set(KEY+"-ord",ORD);  // new order for every question
+  document.querySelectorAll("article.q").forEach(el=>{ resetCard(el); const q=byId[el.dataset.id], o=el.querySelector(".opts"); if(o&&canShuf(q)) o.innerHTML=optButtons(q); }); score();
+  const b=this; clearTimeout(b._t); b.textContent="Cleared · choices shuffled"; b._t=setTimeout(()=>b.textContent="Clear my answers",1800); };
+$("#reset").title=$("#reset2").title="Clear every answer and shuffle the answer choices of every question";
 new IntersectionObserver(([en])=>{ $("#reset2").hidden=en.isIntersecting; }).observe(document.querySelector(".controls"));
 // ---- search
 $("#q").oninput=()=>{ const s=$("#q").value.trim().toLowerCase(); document.body.classList.toggle("searching",!!s);
-  document.querySelectorAll("article.q").forEach(el=>{ const q=byId[el.dataset.id]; el.classList.toggle("done-hide",!!s&&!(q.s+" "+q.o.join(" ")+" "+q.at+" "+q._g.label).toLowerCase().includes(s)); });
+  document.querySelectorAll("article.q").forEach(el=>{ const q=byId[el.dataset.id]; el.classList.toggle("done-hide",!!s&&!(q.s+" "+q.o.join(" ").replace(TK,"$1")+" "+q.at+" "+q._g.label).toLowerCase().includes(s)); });
   document.querySelectorAll(".grp").forEach(g=>g.classList.toggle("done-hide",!g.querySelector("article.q:not(.done-hide)")));
   document.querySelectorAll(".unit").forEach(u=>u.classList.toggle("done-hide",!u.querySelector("article.q:not(.done-hide)")));
   document.querySelectorAll("section.sec").forEach(sc=>sc.classList.toggle("done-hide",!sc.querySelector("article.q:not(.done-hide)"))); };
