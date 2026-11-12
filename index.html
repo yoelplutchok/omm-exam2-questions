@@ -339,6 +339,8 @@ function order(q){ const base=q.o.map(lt), s=ORD[q.id]; if(!canShuf(q)||typeof s
 function shuffled(q){ const base=q.o.map(lt), pin=new Set(q.pn||[]), free=base.filter(x=>!pin.has(x));
   for(let i=free.length-1;i>0;i--){ const j=rint(i+1), t=free[i]; free[i]=free[j]; free[j]=t; }  // Fisher–Yates: every order equally likely
   let k=0; return base.map(x=>pin.has(x)?x:free[k++]); }
+function reshuffled(q){ const cur=order(q).join(""), free=q.o.length-(q.pn||[]).length; if(free<2) return cur;  // Try again: any order except the one on screen
+  let s, i=0; do s=shuffled(q).join(""); while(s===cur&&++i<200); return s; }
 function dmap(q){ const m={}; order(q).forEach((L,i)=>m[L]=String.fromCharCode(65+i)); return m; }
 function RL(s,m){ return String(s).replace(TRUN,run=>{ const L=[...run.matchAll(TK)].map(x=>m[x[1]]||x[1]).sort(), sp=run.split(/⟦[A-H]⟧/).slice(1,-1);
     return L.map((x,i)=>x+(i<sp.length?sp[i]:"")).join(""); }).replace(TK,(_,x)=>m[x]||x); }
@@ -533,7 +535,8 @@ document.addEventListener("click",e=>{
   const t=e.target, el=t.closest&&t.closest("article.q");
   if(t.closest(".opt")&&el&&!t.closest(".opt").disabled){ const q=byId[el.dataset.id], p=t.closest(".opt").dataset.l; done[q.id]=(q.g||[]).includes(p)?"ok":p; store.set(KEY+"-done",done); answer(el,q,p); score(); return; }
   if(t.classList.contains("showans")&&el){ const q=byId[el.dataset.id]; done[q.id]="seen"; store.set(KEY+"-done",done); answer(el,q,null); return; }
-  if(t.classList.contains("again")&&el){ delete done[el.dataset.id]; store.set(KEY+"-done",done); resetCard(el); score(); return; }
+  if(t.classList.contains("again")&&el){ const q=byId[el.dataset.id]; delete done[q.id]; store.set(KEY+"-done",done); resetCard(el);
+    if(canShuf(q)){ ORD[q.id]=reshuffled(q); store.set(KEY+"-ord",ORD); el.querySelector(".opts").innerHTML=optButtons(q); } score(); return; }
   if(t.classList.contains("star")&&el){ const id=el.dataset.id; if(stars[id]) delete stars[id]; else stars[id]=1; store.set(KEY+"-stars",stars);
     t.setAttribute("aria-pressed",!!stars[id]); t.textContent=stars[id]?"★":"☆"; el.classList.toggle("starred",!!stars[id]); return; }
   if(FEAT){ if(t.classList.contains("pstar")){ togglePic(t); return; } if(t.tagName==="IMG"&&t.closest(".pimg")&&!t.closest("#lb2")){ openViewer(t); return; } }
